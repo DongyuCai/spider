@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+	<meta>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="renderer" content="webkit">
+	<title>张家港二手房买房租房</title>
+	<!-- <link rel="stylesheet" type="text/css" href="lib/weui-1.1.1/dist/style/weui.min.css"> -->
+	<link rel='stylesheet' href='../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css' type='text/css'  />
+</head>
+<body onload="loadHouseBuyDetail()">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-top: 20px;position: fixed; z-index: 1001;">
+    	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="background-color: #393D49;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF" id="lianXiRen">
+		</div>
+		<a id="lianXiFangShi" href="tel:15851617175" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
+        	
+		</a>
+	</div>
+    <form class="form-horizontal" style="padding-top: 120px;">
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">标题</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="biaoTi"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">发布时间</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7" color="#FF5722"><span id="faBuShiJian"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">价格</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="jiaGe"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">面积</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="mianJi"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">小区</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="xiaoQu"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">户型</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="huXing"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">学区</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="xueQu"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">楼层</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="louCeng"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">联系人</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="lianXiRen"></span></font></p>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-3 control-label"><font size="7">联系方式</font></label>
+	    <div class="col-sm-9">
+	      <p class="form-control-static" ><font size="7"><span id="lianXiFangShi"></span></font></p>
+	    </div>
+	  </div>
+	</form>
+</body>
+<script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
+<script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="../js/base.js"></script>
+<script type="text/javascript">
+	function loadHouseBuyDetail(){
+		var url = window.location.href;
+		var param = urlParamUtil(url);
+		if(param.houseBuyId){
+			$.ajax({
+				url:API_DOMAIN+"/houseBuy/"+param.houseBuyId,
+				type:'GET', //GET
+			    async:true,    //或false,是否异步
+			    data:{},
+			    timeout:5000,    //超时时间
+			    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+			    beforeSend:function(xhr){
+			    },
+			    success:function(data,textStatus,jqXHR){
+			    	var houseBuy = data;
+			    	if(!houseBuy || !houseBuy.id){
+			    		alert("房源不存在");
+			    	}else{
+			    		$("#biaoTi").html(houseBuy.biaoTi);
+			    		$("#faBuShiJian").html(dateFormat(houseBuy.faBuShiJian,0));
+			    		$("#jiaGe").html(houseBuy.jiaGe+" 万");
+			    		$("#mianJi").html(houseBuy.mianJi+" 平方");
+			    		$("#xiaoQu").html(houseBuy.xiaoQu);
+			    		$("#xueQu").html(houseBuy.xueQu);
+			    		$("#huXing").html(houseBuy.huXing);
+			    		$("#zhuangXiu").html(houseBuy.zhuangXiu);
+			    		$("#louCeng").html(houseBuy.louCeng);
+			    		$("div#lianXiRen").html(houseBuy.lianXiRen);
+			    		$("span#lianXiRen").html(houseBuy.lianXiRen);
+			    		// 15851617174
+			    		$("span#lianXiFangShi").html(houseBuy.lianXiFangShi);
+			    		$("a#lianXiFangShi").html('<span class="glyphicon glyphicon-earphone"></span> '+houseBuy.lianXiFangShi);
+			    		$("a#lianXiFangShi").attr("href","tel:"+houseBuy.lianXiFangShi);
+			    	}
+			    },
+			    error:function(xhr,textStatus){
+			        alert("房源不存在");
+			    },
+			    complete:function(){
+			        console.log('结束')
+			    }
+			});
+		}else{
+			alert("没有指定房源");
+		}
+	}
+</script>
+</html>

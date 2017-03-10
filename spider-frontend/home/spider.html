@@ -1,0 +1,57 @@
+<div tableheightresize style="overflow-y:scroll;">
+    <table class="table table-hover table-condensed">
+        <tr>
+            <th>网站</th>
+            <th>页码</th>
+            <th>最后一次成功</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <tr ng-repeat="task in taskList">
+            <td>{{task.wangZhan}}</td>
+            <td>{{task.page}}</td>
+            <td>{{task.timeLine}}</td>
+            <th>{{task.status|spiderTaskStatus}}</th>
+            <td width="200px">
+                <button type="button" class="btn btn-sm btn-primary" ng-if="task.status<=0" ng-click="delete(task)">
+                    <span class="glyphicon glyphicon-edit"></span>删除
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" ng-if="task.status==0" ng-click="shutDown(task)">
+                    <span class="glyphicon glyphicon-remove"></span>暂停
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" ng-if="task.status==-1" ng-click="startUp(task)">
+                    <span class="glyphicon glyphicon-remove"></span>启动
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="toolbar" class="col-lg-12" style="padding: 0px;">
+    <!--工具 -->
+    <div class="col-lg-2">
+        <ul class="pagination">
+            <li ><a href="javascript:void(0)" ng-click="showCreateDialog()">
+                <span class="glyphicon glyphicon-plus"></span>增加新任务
+            </a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="dialog" style="display:none;background-color: #FFFFFF;padding: 0px;" class="panel panel-default col-lg-8">
+    <div class="panel-heading"><h1>增加新任务</h1></div>
+    <div class="panel-body">
+        <div class="input-group input-group-lg col-lg-12" style="margin: 5px;">
+          <span class="input-group-addon" id="sizing-addon1">网站</span>
+          <input type="text" class="form-control" placeholder="" ng-model="task.wangZhan">
+        </div>
+        <div class="input-group input-group-lg col-lg-12" style="margin: 5px;">
+          <span class="input-group-addon" id="sizing-addon1">页码</span>
+          <input type="text" class="form-control" placeholder="没有可不填" ng-model="task.page">
+        </div>
+        <div class="input-group input-group-lg col-lg-12" style="margin: 5px;">
+            <button type="button" id="saveBtn" class="btn btn-lg btn-primary" ng-click="saveTask()">确定</button>
+            <button type="button" class="btn btn-lg btn-default" style="margin: 5px;" ng-click="closeDialog()">取消</button>
+        </div>
+    </div>
+</div>

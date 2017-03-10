@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" id="MainApp" ng-app="MainApp">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="renderer" content="webkit">
+	<title>SPIDER系统</title>
+	<!-- build:css styles/style.min.css -->
+
+	<link rel='stylesheet' href='bower_components/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
+	<link rel='stylesheet' href='bower_components/angularjs-toaster/toaster.css' type='text/css'  />
+	<link rel='stylesheet' href='bower_components/fontawesome/css/font-awesome.min.css' type='text/css'  />
+	<link rel='stylesheet' href='lib/bootstrap-3.3.7-dist/css/bootstrap.min.css' type='text/css'  />
+	<link rel='stylesheet' href='lib/easydialog-v2.0/easydialog.css' type='text/css'  />
+	
+	<link rel='stylesheet' href='styles/twitter-bootstrap-callout.css' type='text/css'  />
+	
+	<!-- endbuild -->
+	
+</head>
+
+<body ng-class="{'layout-fixed' : app.layout.isFixed, 'aside-collapsed' : app.layout.isCollapsed,'aside-toggled': app.asideToggled}">
+
+<div  style="padding: 15px;" ng-include="'home/head.html'" ng-controller="HeadController" class="topnavbar-wrapper"></div>
+
+<section>
+	<!-- Page content-->
+	<div style="padding: 15px;" ui-view="" autoscroll="false" ng-class="app.viewAnimation" class="content-wrapper"></div>
+</section>
+
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}" style="z-index: 20000000"></toaster-container>
+
+</div>
+</body>
+
+</html>
+<!-- build:libs js/appIndex/libs.js -->
+
+
+<script src="bower_components/jquery/jquery.min.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+
+
+<script src="lib/jquery/jquery.PrintArea.js"></script>
+
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+<script src="bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="bower_components/restangular/dist/restangular.min.js"></script>
+<script src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script src='bower_components/angularjs-toaster/toaster.js'></script>
+<script src='bower_components/angular-loading-bar/build/loading-bar.min.js'></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/w5c-validator/w5cValidator.min.js"></script>
+<script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="lib/easydialog-v2.0/easydialog.min.js"></script>
+
+
+<script src="js/appMain/base.js"></script>
+
+<!-- endbuild -->
+
+<script src="js/appMain/appOperator.js"></script>
+<script src="js/appMain/config.js"></script>
+<script src="js/services/Utils.js"></script>
+<script src="js/directives/all.directive.js"></script>
+<script src="js/services/all.service.js"></script>
+<script src="js/filters/filters.js"></script>
+
+<script src="home/head.js"></script>
+<script src="js/utils/f11FullScreenUtil.js"></script>

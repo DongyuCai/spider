@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+	<meta>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="renderer" content="webkit">
+	<title>张家港二手房买房租房</title>
+	<!-- <link rel="stylesheet" type="text/css" href="lib/weui-1.1.1/dist/style/weui.min.css"> -->
+	<link rel='stylesheet' href='lib/bootstrap-3.3.7-dist/css/bootstrap.min.css' type='text/css'  />
+
+</head>
+<body onload="loadHouseBuyList(1)">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-top: 20px;position: fixed; z-index: 1001;">
+    	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding: 0px;">
+        	<input id="keywords_INP" type="text" class="form-control" placeholder="镇/小区/学区/楼层..." style="font-size: 50px;height: 100px;border-color: #1E9FFF">
+		</div>
+        <button id="loadNew_BTN" class="btn btn-default btn-lg col-xs-4 col-sm-4 col-md-4 col-lg-4" onclick="loadHouseBuyList(1)" style="font-size: 50px;height: 100px;background-color: #1E9FFF;color: #FFFFFF">搜一搜</button>
+	</div>
+	<div id="houseBuyListContainer_DIV" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 120px;">
+		<div class="list-group" id="houseBuyList_DIV">
+		</div>
+	</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;margin-bottom: 50px;">
+        <a id="loadMore_BTN" href="javascript:void(0);" onclick="loadMoreHouseBuyList()" style="font-size: 50px;">更早的</a>
+	</div>
+	&nbsp;
+</body>
+<script type="text/javascript" src="lib/jquery/jquery-3.1.1.min.js"></script>
+<script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="js/base.js"></script>
+<script type="text/javascript">
+
+	var page = 1;
+	function loadHouseBuyList(p){
+		$("#loadNew_BTN").addClass("disabled");
+		$("#loadNew_BTN").html('<span class="glyphicon glyphicon-refresh"> 加载中...</span>');
+		$("#loadMore_BTN").html('<span class="glyphicon glyphicon-refresh"> 加载中...</span>');
+
+		var keyowrds = $("input#keywords_INP").val();
+
+		$.ajax({
+			url:API_DOMAIN+"/houseBuy/page",
+			type:'GET', //GET
+		    async:true,    //或false,是否异步
+		    data:{
+		        page:p,
+		        pageSize:15,
+		        keywords:keyowrds
+		    },
+		    timeout:5000,    //超时时间
+		    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+		    beforeSend:function(xhr){
+		    },
+		    success:function(data,textStatus,jqXHR){
+		    	var houseBuyList = data.records;
+		    	var houseBuyList_DIV = $("div#houseBuyList_DIV");
+		    	var listHtml = '';
+		    	for(var i=0;i<houseBuyList.length;i++){
+		    		var houseBuy = houseBuyList[i];
+		    		var time = dateFormat(houseBuy.faBuShiJian,1);
+		    		listHtml = listHtml +
+	        					'<a href="'+WEB_DOMAIN+'/home/houseBuyDetail.html?houseBuyId='+houseBuy.id+'" class="list-group-item">'+
+	            				'<p class="list-group-item-heading"><font size="6">'+houseBuy.biaoTi+'</font></p>'+
+	            				'<p class="list-group-item-text"><font size="5" color="#FF5722">'+time+'</font></p>'+
+	        					'</a>';
+		    	}
+				page = p;
+		    	if(page == 1){
+		    		document.getElementById("houseBuyListContainer_DIV").scrollIntoView();
+		    		houseBuyList_DIV.html(listHtml);
+		    	}else{
+		    		houseBuyList_DIV.append(listHtml);
+		    	}
+
+		    },
+		    error:function(xhr,textStatus){
+		        console.log('错误')
+		    },
+		    complete:function(){
+		        console.log('结束')
+				$("#loadNew_BTN").removeClass("disabled");
+				$("#loadNew_BTN").html('搜一搜');
+				$("#loadMore_BTN").removeClass("disabled");
+				$("#loadMore_BTN").html('更早的');
+		    }
+		});
+	}
+
+	function loadMoreHouseBuyList(){
+		loadHouseBuyList(page+1);
+	}
+
+	
+</script>
+</html>

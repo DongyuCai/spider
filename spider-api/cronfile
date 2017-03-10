@@ -1,0 +1,5 @@
+#请将此文件添加到crontab队列里
+#每分钟请求
+*/1 * * * * curl http://localhost:8080/spider-api/spider/analyze/zjgzf?page=1\&id=zjgzf-1 
+*/1 * * * * curl http://localhost:8080/spider-api/spider/analyze/zjgzf?page=2\&id=zjgzf-2 
+*/1 * * * * curl http://localhost:8080/spider-api/spider/analyze/zjgzf?page=3\&id=zjgzf-3 
