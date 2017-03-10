@@ -1,7 +1,8 @@
 package test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.axe.util.StringUtil;
+
+import com.spider.common.util.RegUtil;
 
 public class Test {
 	public static void main(String[] args) {
@@ -13,9 +14,31 @@ public class Test {
 //		String huXing = RegUtil.getRegOne("户型：([^<]+)", "户型：1是凉亭<span>sbdfsd<span>");
 //		String zhuangXiu = RegUtil.getRegOne("装修：([^<]+)", "装修：京珠那个</li><li>楼层啊时代发生地方装修：京珠那个</li><li>楼层");
 //		String xiaoQu = RegUtil.getRegOne("title=\"([^\"]+)小区", "title=\"新乘花苑小区实景小区小区\" 小区");
-//		System.out.println(xiaoQu);
+//		String dian = RegUtil.getRegOne("<div class=\"name\">[^<]+<br/><span>([^<]+)", "436598.jpg\"/></a></div><div class=\"name\">李木子<br/><span>李木子房产城北新村店</span>");
+
+		String html = "安静,视野好。学区:梁丰幼儿园、实验小学(东区)、东渡实验学校";
+		StringBuilder xueQuBuf = new StringBuilder();
+		String refFlag = "[\u4E00-\u9FFF]{2,}";
+		String youErYuan = RegUtil.getRegOne("("+refFlag+"幼儿园)", html);
+		String xiaoXue = RegUtil.getRegOne("("+refFlag+"小学)", html);
+		String chuZhong = RegUtil.getRegOne("("+refFlag+"初中)", html);
+		String zhongXue = RegUtil.getRegOne("("+refFlag+"中学)", html);
+		String xueXiao = RegUtil.getRegOne("("+refFlag+"学校)", html);
+		String[] xueQus = {youErYuan,xiaoXue,chuZhong,zhongXue,xueXiao};
+		xueQuBuf.delete(0, xueQuBuf.length());
+		for(String xueQu:xueQus){
+			if(StringUtil.isNotEmpty(xueQu)){
+				if(xueQuBuf.length() > 0){
+					xueQuBuf.append(",");
+				}
+				xueQuBuf.append(xueQu);
+			}
+		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat();
-		System.out.println(sdf.format(new Date(1489081791000l)));
+		
+		System.out.println(xueQuBuf.toString());
+		
+//		SimpleDateFormat sdf = new SimpleDateFormat();
+//		System.out.println(sdf.format(new Date(1489081791000l)));
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.axe.annotation.ioc.Autowired;
 import org.axe.annotation.ioc.Service;
 
+import com.spider.bsz.dao.HouseBuyDao;
 import com.spider.bsz.dao.SpiderTaskDao;
 import com.spider.bsz.entity.SpiderTask;
 
@@ -13,6 +14,14 @@ public class SpiderTaskService {
 
 	@Autowired
 	private SpiderTaskDao spiderTaskDao;
+	@Autowired
+	private HouseBuyDao houseBuyDao;
+	
+	public void clean(){
+		long maxId = houseBuyDao.maxId();
+		maxId = maxId-10000000;//保存1千万条数据
+		houseBuyDao.clean(maxId);
+	}
 	
 	public boolean checkIfRunning(String id){
 		SpiderTask st = new SpiderTask();
