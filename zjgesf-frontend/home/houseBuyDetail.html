@@ -10,14 +10,17 @@
 	<link rel='stylesheet' href='../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css' type='text/css'  />
 </head>
 <body onload="loadHouseBuyDetail()">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-top: 20px;position: fixed; z-index: 1001;">
+    <div class="navbar-fixed-top col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-top: 20px;">
+    	<a id="toHome" href="" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="background-color: #393D49;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
+    		<span class="glyphicon glyphicon-home"></span>
+		</a>
     	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="background-color: #393D49;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF" id="lianXiRen">
 		</div>
-		<a id="lianXiFangShi" href="tel:15851617175" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
+		<a id="lianXiFangShi" href="tel:15851617175" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
         	
 		</a>
 	</div>
-    <form class="form-horizontal" style="padding-top: 120px;">
+    <form class="form-horizontal" style="padding-top: 120px;padding-bottom: 120px;">
 	  <div class="form-group">
 	    <label class="col-sm-3 control-label"><font size="7">标题</font></label>
 	    <div class="col-sm-9">
@@ -79,11 +82,19 @@
 	    </div>
 	  </div>
 	</form>
+	<div class="navbar-fixed-bottom col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-bottom: 20px;">
+		<a href="javascript:void(0)" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
+        	生成文字分享朋友圈
+		</a>
+	</div>
 </body>
 <script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
 <script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="../js/base.js"></script>
 <script type="text/javascript">
+
+	$("a#toHome").attr("href",WEB_DOMAIN+"/index.html");
+
 	function loadHouseBuyDetail(){
 		var url = window.location.href;
 		var param = urlParamUtil(url);
