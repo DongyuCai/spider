@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="renderer" content="webkit">
-	<title>张家港二手房买房租房</title>
+	<title id="head_title">张家港二手房买房租房</title>
 	<!-- <link rel="stylesheet" type="text/css" href="lib/weui-1.1.1/dist/style/weui.min.css"> -->
 	<link rel='stylesheet' href='../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css' type='text/css'  />
 </head>
@@ -14,10 +14,10 @@
     	<a id="toHome" href="" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="background-color: #393D49;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
     		<span class="glyphicon glyphicon-home"></span>
 		</a>
-    	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="background-color: #393D49;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF" id="lianXiRen">
+    	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="background-color: #393D49;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF" id="lianXiRen">&nbsp;
 		</div>
 		<a id="lianXiFangShi" href="tel:15851617175" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
-        	
+        	&nbsp;
 		</a>
 	</div>
     <form class="form-horizontal" style="padding-top: 120px;padding-bottom: 120px;">
@@ -82,11 +82,11 @@
 	    </div>
 	  </div>
 	</form>
-	<div class="navbar-fixed-bottom col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-bottom: 20px;">
-		<a href="javascript:void(0)" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
-        	生成文字分享朋友圈
+	<!-- <div class="navbar-fixed-bottom col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-bottom: 20px;">
+		<a href="javascript:void(0)" onclick="()" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
+	        	生成文字分享朋友圈
 		</a>
-	</div>
+	</div> -->
 </body>
 <script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
 <script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
@@ -113,21 +113,40 @@
 			    	if(!houseBuy || !houseBuy.id){
 			    		alert("房源不存在");
 			    	}else{
+			    		$("title#head_title").html(houseBuy.biaoTi);
 			    		$("#biaoTi").html(houseBuy.biaoTi);
 			    		$("#faBuShiJian").html(dateFormat(houseBuy.faBuShiJian,0));
-			    		$("#jiaGe").html(houseBuy.jiaGe+" 万");
-			    		$("#mianJi").html(houseBuy.mianJi+" 平方");
-			    		$("#xiaoQu").html(houseBuy.xiaoQu);
-			    		$("#xueQu").html(houseBuy.xueQu);
-			    		$("#huXing").html(houseBuy.huXing);
-			    		$("#zhuangXiu").html(houseBuy.zhuangXiu);
-			    		$("#louCeng").html(houseBuy.louCeng);
-			    		$("div#lianXiRen").html(houseBuy.lianXiRen);
-			    		$("span#lianXiRen").html(houseBuy.lianXiRen);
+			    		if(houseBuy.jiaGe){
+			    			$("#jiaGe").html(houseBuy.jiaGe+" 万");
+			    		}
+			    		if(houseBuy.mianJi){
+			    			$("#mianJi").html(houseBuy.mianJi+" 平方");
+			    		}
+			    		if(houseBuy.xiaoQu){
+			    			$("#xiaoQu").html(houseBuy.xiaoQu);
+			    		}
+			    		if(houseBuy.xueQu){
+			    			$("#xueQu").html(houseBuy.xueQu);
+			    		}
+			    		if(houseBuy.huXing){
+			    			$("#huXing").html(houseBuy.huXing);
+			    		}
+			    		if(houseBuy.zhuangXiu){
+			    			$("#zhuangXiu").html(houseBuy.zhuangXiu);
+			    		}
+			    		if(houseBuy.louCeng){
+			    			$("#louCeng").html(houseBuy.louCeng);
+			    		}
+			    		if(houseBuy.lianXiRen){
+			    			$("div#lianXiRen").html(houseBuy.lianXiRen);
+			    			$("span#lianXiRen").html(houseBuy.lianXiRen);
+			    		}
 			    		// 15851617174
-			    		$("span#lianXiFangShi").html(houseBuy.lianXiFangShi);
-			    		$("a#lianXiFangShi").html('<span class="glyphicon glyphicon-earphone"></span> '+houseBuy.lianXiFangShi);
-			    		$("a#lianXiFangShi").attr("href","tel:"+houseBuy.lianXiFangShi);
+			    		if(houseBuy.lianXiFangShi){
+			    			$("span#lianXiFangShi").html(houseBuy.lianXiFangShi);
+			    			$("a#lianXiFangShi").html('<span class="glyphicon glyphicon-earphone"></span> '+houseBuy.lianXiFangShi);
+			    			$("a#lianXiFangShi").attr("href","tel:"+houseBuy.lianXiFangShi);
+			    		}
 			    	}
 			    },
 			    error:function(xhr,textStatus){

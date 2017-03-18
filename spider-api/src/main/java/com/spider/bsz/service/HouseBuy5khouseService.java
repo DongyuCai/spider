@@ -17,23 +17,23 @@ import com.spider.common.util.PinYinUtil;
 import com.spider.common.util.RegUtil;
 
 @Service
-public class AnalyzerZjgzf {
+public class HouseBuy5khouseService {
 	
 	@Autowired
 	private HouseBuyDao houseBuyDao;
 
-	public void analyze(int page) {
-		String url = "http://www.zjgzf.cn/list_search.asp?typeto=1&Page="+page;
+	public void spider(int page) {
+		String url = "http://zjg.5khouse.com/sell/0-0/-b-c-d-f-g-h-i"+page+"-j-k-l.aspx";
 		
-		String htmlList = HtmlUtil.analyze(url,"gb2312", "置顶结束，正文开始", "class=\"hotxiaoqu\"");
+		String htmlList = HtmlUtil.analyze(url,"utf-8", "<ul class=\"house\"", "<ul id=\"page\"");
 		//分析每个a标签
-		List<String> regAll = RegUtil.getRegAll("href=\"([0-9a-zA-Z/\\._]+)\"", htmlList);
+		List<String> regAll = RegUtil.getRegAll("href=\"(http://[0-9a-zA-Z/\\._]+)\"", htmlList);
 		StringBuilder keywordsBuf = new StringBuilder();
 		StringBuilder keywordsPinYinBuf = new StringBuilder();
 		StringBuilder xueQuBuf = new StringBuilder();
 		Set<String> uriSet = new HashSet<>();
 		for(String uri : regAll){
-			if(!uri.contains("_sale.html")){
+			if(!uri.contains("/sell/")){
 				continue;
 			}
 			if(uriSet.contains(uri)){
@@ -41,15 +41,15 @@ public class AnalyzerZjgzf {
 			}
 			try {
 				uriSet.add(uri);
-				String html = HtmlUtil.analyze("http://www.zjgzf.cn"+uri, "gb2312", "div class=\"infoMain", "_blank\">同小区出售房源</a");
+				String html = HtmlUtil.analyze(uri, "utf-8", "<div class=\"top\">", "<a name=\"jianjie\"></a>");
 				html  = html.replaceAll("&#160;", " ");
 				html = html.replaceAll("&nbsp;", " ");
 				html = html.replaceAll("�", " ");
 				
 				do{
 					HouseBuy house = new HouseBuy();
-					house.setLaiYuanWangZhan("张家港房产网");
-					String biaoTi = RegUtil.getRegOne("pLR10\"><h1>([^<]+)", html);
+					house.setLaiYuanWangZhan("张家港看房网");
+					String biaoTi = RegUtil.getRegOne("class=\"l\"><h1>([^<]+)", html);
 					if(StringUtil.isNotEmpty(biaoTi)){
 						house.setBiaoTi(biaoTi);
 					}else{
@@ -63,54 +63,56 @@ public class AnalyzerZjgzf {
 						
 						house.setLaiYuanWangZhanFangYuanHao(laiYuanWangZhanFangYuanHao);
 					}
-					String faBuShiJian = RegUtil.getRegOne("发布时间：([0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2})", html);
+					String faBuShiJian = RegUtil.getRegOne("更新时间：([0-9]{4}/[0-9]{1,2}/[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2})", html);
 					if(StringUtil.isNotEmpty(faBuShiJian)){
 						try {
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 							Date time = sdf.parse(faBuShiJian);
 							house.setFaBuShiJian(time);
 						} catch (Exception e) {}
 					}
-					String jiaGe = RegUtil.getRegOne(">([0-9\\.]+)</b>万元", html);
+					String jiaGe = RegUtil.getRegOne("id=\"zjia\">([0-9\\.]+)", html);
 					if(StringUtil.isNotEmpty(jiaGe)){
 						try {
 							house.setJiaGe(Double.valueOf(jiaGe));
 						} catch (Exception e) {}
 					}
-					String huXing = RegUtil.getRegOne("户型：([^<]+)", html);
+					String huXing = RegUtil.getRegOne("户<span></span>型：<s>([^<]+)", html);
 					if(StringUtil.isNotEmpty(huXing)){
-						String[] split = huXing.split("-");
-						if(split.length > 0){
-							house.setHuXing(split[0].trim());
-						}
-						if(split.length > 1){
-							try {
-								String mianJi = split[1];
-								if(mianJi.contains("平米")){
-									mianJi = mianJi.substring(0, mianJi.indexOf("平米"));
-								}
-								house.setMianJi(Double.valueOf(mianJi.trim()));
-							} catch (Exception e) {}
-						}
+						house.setHuXing(huXing.trim());
 					}
-					String zhuangXiu = RegUtil.getRegOne("装修：([^<]+)", html);
+					String mianJi = RegUtil.getRegOne("建筑面积：<s>([0-9\\.]+)", html);
+					if(StringUtil.isNotEmpty(mianJi)){
+						try {
+							house.setMianJi(Double.valueOf(mianJi));
+						} catch (Exception e) {}
+					}
+					String zhuangXiu = RegUtil.getRegOne("装修情况：<s>([^<]+)", html);
 					if(StringUtil.isNotEmpty(zhuangXiu)){
 						house.setZhuangXiu(zhuangXiu);
 					}
-					String louCeng = RegUtil.getRegOne("楼层：([^<]+)", html);
+					String louCeng = RegUtil.getRegOne("所在楼层：<s>([^<]+)", html);
 					if(StringUtil.isNotEmpty(louCeng)){
 						house.setLouCeng(louCeng);
 					}
-					String xiaoQu = RegUtil.getRegOne("title=\"([^\"]+)小区", html);
+					String xiaoQu = RegUtil.getRegOne("<dt>小区：([^<]+)", html);
+					if(StringUtil.isEmpty(xiaoQu)){
+						xiaoQu = RegUtil.getRegOne("title=\"([^\"]+)小区", html);
+					}
 					if(StringUtil.isNotEmpty(xiaoQu)){
 						house.setXiaoQu(xiaoQu);
 					}
-					String lianXiFangShi = RegUtil.getRegOne("<li class=\"tel\"><p><b>([^<]+)", html);
+					String lianXiFangShi = RegUtil.getRegOne("<span class=\"lx\"><b>([^<]+)", html);
 					if(StringUtil.isNotEmpty(lianXiFangShi)){
+						lianXiFangShi = lianXiFangShi.replaceAll(" ", "");
 						house.setLianXiFangShi(lianXiFangShi);
 					}
-					String lianXiRen = RegUtil.getRegOne("姓名：<strong>([^<]+)", html);
+					String lianXiRen = RegUtil.getRegOne("<div class=\"name\">([^<]+)", html);
 					if(StringUtil.isNotEmpty(lianXiRen)){
+						String dian = RegUtil.getRegOne("<div class=\"name\">[^<]+<br/><span>([^<]+)", html);
+						if(StringUtil.isNotEmpty(dian)){
+							lianXiRen = lianXiRen+"("+dian+")";
+						}
 						house.setLianXiRen(lianXiRen);
 					}
 					

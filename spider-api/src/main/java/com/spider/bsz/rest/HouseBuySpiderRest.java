@@ -6,18 +6,18 @@ import org.axe.annotation.mvc.Request;
 import org.axe.annotation.mvc.RequestParam;
 import org.axe.constant.RequestMethod;
 
-import com.spider.bsz.service.Analyzer5khouse;
-import com.spider.bsz.service.AnalyzerZjgzf;
+import com.spider.bsz.service.HouseBuy5khouseService;
+import com.spider.bsz.service.HouseBuyZjgzfService;
 import com.spider.bsz.service.SpiderTaskService;
 import com.spider.common.annotation.Required;
 
-@Controller(basePath="/spider",title="蜘蛛")
-public class SpiderRest {
+@Controller(basePath="/spider/house_buy",title="二手房蜘蛛")
+public class HouseBuySpiderRest {
 
 	@Autowired
-	private AnalyzerZjgzf analyzerZjgzf;
+	private HouseBuyZjgzfService zjgzfService;
 	@Autowired
-	private Analyzer5khouse analyzer5khouse;
+	private HouseBuy5khouseService _5khouseService;
 	@Autowired
 	private SpiderTaskService spiderTaskService;
 	
@@ -26,8 +26,8 @@ public class SpiderRest {
 		spiderTaskService.clean();
 	}
 	
-	@Request(value="/analyze/zjgzf",method=RequestMethod.GET)
-	public String analyzeZjgzf(
+	@Request(value="/zjgzf",method=RequestMethod.GET)
+	public String zjgzf(
 			@Required
 			@RequestParam("page")Integer page,
 			@Required
@@ -35,14 +35,14 @@ public class SpiderRest {
 			){
 		boolean running = spiderTaskService.checkIfRunning(id);
 		if(!running){
-			analyzerZjgzf.analyze(page);
+			zjgzfService.spider(page);
 			spiderTaskService.stop(id);
 		}
 		return id;
 	}
 	
-	@Request(value="/analyze/5khouse",method=RequestMethod.GET)
-	public String analyze5khouse(
+	@Request(value="/5khouse",method=RequestMethod.GET)
+	public String _5khouse(
 			@Required
 			@RequestParam("page")Integer page,
 			@Required
@@ -50,7 +50,7 @@ public class SpiderRest {
 			){
 		boolean running = spiderTaskService.checkIfRunning(id);
 		if(!running){
-			analyzer5khouse.analyze(page);
+			_5khouseService.spider(page);
 			spiderTaskService.stop(id);
 		}
 		return id;
