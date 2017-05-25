@@ -41,7 +41,7 @@ public class B_AntiSqlAttackFilter implements Filter{
 
 	@Override
 	public int setLevel() {
-		return 1;
+		return 2;
 	}
 
 	@Override

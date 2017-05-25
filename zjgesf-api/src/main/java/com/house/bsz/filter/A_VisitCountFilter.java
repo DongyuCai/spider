@@ -32,7 +32,7 @@ public class A_VisitCountFilter implements Filter{
 
 	@Override
 	public int setLevel() {
-		return 0;
+		return 1;
 	}
 
 	@Override

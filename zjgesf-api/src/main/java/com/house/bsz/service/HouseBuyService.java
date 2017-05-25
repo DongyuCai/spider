@@ -17,11 +17,9 @@ public class HouseBuyService {
 	public Page<HouseBuy> page(int page,int pageSize,String keywords){
 		StringBuilder buf = new StringBuilder();
 		if(StringUtil.isNotEmpty(keywords)){
-			buf.append("and keywords like '");
-			for(int i=0;i<keywords.length();i++){
-				buf.append("%").append(keywords.charAt(i)).append("%");
-			}
-			buf.append("'");
+			buf.append("and keywords like '%");
+			buf.append(keywords);
+			buf.append("%'");
 		}
 		buf.append(" order by faBuShiJian desc");
 		

@@ -81,6 +81,9 @@
 	      <p class="form-control-static" ><font size="7"><span id="lianXiFangShi"></span></font></p>
 	    </div>
 	  </div>
+	  <div class="form-group" id="pictures">
+	    
+	  </div>
 	</form>
 	<!-- <div class="navbar-fixed-bottom col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #FFFFFF;padding-bottom: 20px;">
 		<a href="javascript:void(0)" onclick="()" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #01AAED;padding: 10px;text-align: center;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;font-size: 50px;color: #FFFFFF">
@@ -146,6 +149,15 @@
 			    			$("span#lianXiFangShi").html(houseBuy.lianXiFangShi);
 			    			$("a#lianXiFangShi").html('<span class="glyphicon glyphicon-earphone"></span> '+houseBuy.lianXiFangShi);
 			    			$("a#lianXiFangShi").attr("href","tel:"+houseBuy.lianXiFangShi);
+			    		}
+
+			    		//图片
+			    		if(houseBuy.pictures){
+			    			var pictureAry = houseBuy.pictures.split(",");
+			    			for(var i=0;i<pictureAry.length;i++){
+			    				var imgHtml = '<img src="'+IMG_DOMAIN+pictureAry[i]+'" />';
+			    				$("div#pictures").append('<div style="text-align:center;">'+imgHtml+'</div>');
+			    			}
 			    		}
 			    	}
 			    },

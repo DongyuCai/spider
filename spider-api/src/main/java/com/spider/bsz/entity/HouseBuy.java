@@ -5,6 +5,7 @@ import java.util.Date;
 import org.axe.annotation.persistence.ColumnDefine;
 import org.axe.annotation.persistence.Comment;
 import org.axe.annotation.persistence.Table;
+import org.axe.util.StringUtil;
 
 @Table("house_buy")
 public class HouseBuy extends IdEntity{
@@ -36,6 +37,9 @@ public class HouseBuy extends IdEntity{
 	@Comment("楼层")
 	private String louCeng;
 	
+	@Comment("图片")
+	private String pictures;
+	
 	@Comment("联系人")
 	private String lianXiRen;
 	
@@ -47,7 +51,10 @@ public class HouseBuy extends IdEntity{
 	
 	@Comment("来源网站的标示：房源号")
 	private String laiYuanWangZhanFangYuanHao;
-
+	
+	@Comment("房源在来源网站的url地址")
+	private String laiYuanWangZhanUrl;
+	
 	@ColumnDefine("varchar(1000) DEFAULT NULL COMMENT '查询关键字'")
 	private String keywords;
 	
@@ -58,7 +65,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setBiaoTi(String biaoTi) {
-		biaoTi = biaoTi.length() > 250?biaoTi.substring(0, 250):biaoTi;
+		biaoTi = StringUtil.isNotEmpty(biaoTi) && biaoTi.length() > 250?biaoTi.substring(0, 250):biaoTi;
 		this.biaoTi = biaoTi;
 	}
 
@@ -75,7 +82,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setXiaoQu(String xiaoQu) {
-		xiaoQu = xiaoQu.length() > 250?xiaoQu.substring(0, 250):xiaoQu;
+		xiaoQu = StringUtil.isNotEmpty(xiaoQu) && xiaoQu.length() > 250?xiaoQu.substring(0, 250):xiaoQu;
 		this.xiaoQu = xiaoQu;
 	}
 
@@ -100,7 +107,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setHuXing(String huXing) {
-		huXing = huXing.length() > 250?huXing.substring(0, 250):huXing;
+		huXing = StringUtil.isNotEmpty(huXing) && huXing.length() > 250?huXing.substring(0, 250):huXing;
 		this.huXing = huXing;
 	}
 
@@ -109,7 +116,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setZhuangXiu(String zhuangXiu) {
-		zhuangXiu = zhuangXiu.length() > 250?zhuangXiu.substring(0, 250):zhuangXiu;
+		zhuangXiu = StringUtil.isNotEmpty(zhuangXiu) && zhuangXiu.length() > 250?zhuangXiu.substring(0, 250):zhuangXiu;
 		this.zhuangXiu = zhuangXiu;
 	}
 
@@ -118,7 +125,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setLouCeng(String louCeng) {
-		louCeng = louCeng.length() > 250?louCeng.substring(0, 250):louCeng;
+		louCeng = StringUtil.isNotEmpty(louCeng) && louCeng.length() > 250?louCeng.substring(0, 250):louCeng;
 		this.louCeng = louCeng;
 	}
 
@@ -127,7 +134,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setLianXiRen(String lianXiRen) {
-		lianXiRen = lianXiRen.length() > 250?lianXiRen.substring(0, 250):lianXiRen;
+		lianXiRen = StringUtil.isNotEmpty(lianXiRen) && lianXiRen.length() > 250?lianXiRen.substring(0, 250):lianXiRen;
 		this.lianXiRen = lianXiRen;
 	}
 
@@ -136,7 +143,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setLianXiFangShi(String lianXiFangShi) {
-		lianXiFangShi = lianXiFangShi.length() > 250?lianXiFangShi.substring(0, 250):lianXiFangShi;
+		lianXiFangShi = StringUtil.isNotEmpty(lianXiFangShi) && lianXiFangShi.length() > 250?lianXiFangShi.substring(0, 250):lianXiFangShi;
 		this.lianXiFangShi = lianXiFangShi;
 	}
 
@@ -154,7 +161,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setLaiYuanWangZhanFangYuanHao(String laiYuanWangZhanFangYuanHao) {
-		laiYuanWangZhanFangYuanHao = laiYuanWangZhanFangYuanHao.length() > 250?laiYuanWangZhanFangYuanHao.substring(0, 250):laiYuanWangZhanFangYuanHao;
+		laiYuanWangZhanFangYuanHao = StringUtil.isNotEmpty(laiYuanWangZhanFangYuanHao) && laiYuanWangZhanFangYuanHao.length() > 250?laiYuanWangZhanFangYuanHao.substring(0, 250):laiYuanWangZhanFangYuanHao;
 		this.laiYuanWangZhanFangYuanHao = laiYuanWangZhanFangYuanHao;
 	}
 
@@ -171,7 +178,7 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setKeywords(String keywords) {
-		keywords = keywords.length() > 1000?keywords.substring(0, 1000):keywords;
+		keywords = StringUtil.isNotEmpty(keywords) && keywords.length() > 1000?keywords.substring(0, 1000):keywords;
 		this.keywords = keywords;
 	}
 
@@ -180,8 +187,23 @@ public class HouseBuy extends IdEntity{
 	}
 
 	public void setXueQu(String xueQu) {
-		xueQu = xueQu.length() > 250?xueQu.substring(0, 250):xueQu;
+		xueQu = StringUtil.isNotEmpty(xueQu) && xueQu.length() > 250?xueQu.substring(0, 250):xueQu;
 		this.xueQu = xueQu;
 	}
-	
+
+	public String getLaiYuanWangZhanUrl() {
+		return laiYuanWangZhanUrl;
+	}
+
+	public void setLaiYuanWangZhanUrl(String laiYuanWangZhanUrl) {
+		this.laiYuanWangZhanUrl = laiYuanWangZhanUrl;
+	}
+
+	public String getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(String pictures) {
+		this.pictures = pictures;
+	}
 }

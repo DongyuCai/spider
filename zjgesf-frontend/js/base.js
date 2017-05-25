@@ -1,8 +1,10 @@
-	// var API_DOMAIN = "http://121.43.61.76:8080/zjgesf-api";
-	// var WEB_DOMAIN = "http://121.43.61.76";
+	// var API_DOMAIN = "http://api.zjgwzc.com/zjgesf-api";
+	// var WEB_DOMAIN = "http://www.zjgwzc.com";
 
-	var API_DOMAIN = "http://localhost:8090";
-	var WEB_DOMAIN = "http://127.0.0.1:13345";
+	var API_DOMAIN = "http://localhost:8080/zjgesf-api";
+	var WEB_DOMAIN = "http://127.0.0.1:22199";
+
+	var IMG_DOMAIN = WEB_DOMAIN+"/house_pictures/";
 
 
 

@@ -1,13 +1,19 @@
 package com.spider.bsz.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.axe.annotation.ioc.Autowired;
 import org.axe.annotation.ioc.Service;
+import org.axe.util.CollectionUtil;
+import org.axe.util.HttpUtil;
+import org.axe.util.PropsUtil;
 import org.axe.util.StringUtil;
 
 import com.spider.bsz.dao.HouseBuyDao;
@@ -18,6 +24,11 @@ import com.spider.common.util.RegUtil;
 
 @Service
 public class HouseBuyZjgzfService {
+	private String imgDir = "";
+	{
+		Properties CONFIG_PROPS = PropsUtil.loadProps("setting.properties");
+		imgDir = PropsUtil.getString(CONFIG_PROPS, "img_dir");
+	}
 	
 	@Autowired
 	private HouseBuyDao houseBuyDao;
@@ -25,7 +36,7 @@ public class HouseBuyZjgzfService {
 	public void spider(int page) {
 		String url = "http://www.zjgzf.cn/list_search.asp?typeto=1&Page="+page;
 		
-		String htmlList = HtmlUtil.analyze(url,"gb2312", "置顶结束，正文开始", "class=\"hotxiaoqu\"");
+		String htmlList = HtmlUtil.analyze(url,"gb2312", "imageField322", "class=\"hotxiaoqu\"");
 		//分析每个a标签
 		List<String> regAll = RegUtil.getRegAll("href=\"([0-9a-zA-Z/\\._]+)\"", htmlList);
 		StringBuilder keywordsBuf = new StringBuilder();
@@ -41,13 +52,15 @@ public class HouseBuyZjgzfService {
 			}
 			try {
 				uriSet.add(uri);
-				String html = HtmlUtil.analyze("http://www.zjgzf.cn"+uri, "gb2312", "div class=\"infoMain", "_blank\">同小区出售房源</a");
+				String houseUrl = "http://www.zjgzf.cn"+uri;
+				String html = HtmlUtil.analyze(houseUrl, "gb2312", "div class=\"infoMain", "_blank\">同小区出售房源</a");
 				html  = html.replaceAll("&#160;", " ");
 				html = html.replaceAll("&nbsp;", " ");
 				html = html.replaceAll("�", " ");
 				
 				do{
 					HouseBuy house = new HouseBuy();
+					house.setLaiYuanWangZhanUrl(houseUrl);
 					house.setLaiYuanWangZhan("张家港房产网");
 					String biaoTi = RegUtil.getRegOne("pLR10\"><h1>([^<]+)", html);
 					if(StringUtil.isNotEmpty(biaoTi)){
@@ -77,7 +90,7 @@ public class HouseBuyZjgzfService {
 							house.setJiaGe(Double.valueOf(jiaGe));
 						} catch (Exception e) {}
 					}
-					String huXing = RegUtil.getRegOne("户型：([^<]+)", html);
+					String huXing = RegUtil.getRegOne("户型: ([^<]+)", html);
 					if(StringUtil.isNotEmpty(huXing)){
 						String[] split = huXing.split("-");
 						if(split.length > 0){
@@ -93,15 +106,17 @@ public class HouseBuyZjgzfService {
 							} catch (Exception e) {}
 						}
 					}
-					String zhuangXiu = RegUtil.getRegOne("装修：([^<]+)", html);
+					String zhuangXiu = RegUtil.getRegOne("装修: ([^<]+)", html);
 					if(StringUtil.isNotEmpty(zhuangXiu)){
 						house.setZhuangXiu(zhuangXiu);
 					}
-					String louCeng = RegUtil.getRegOne("楼层：([^<]+)", html);
+					String louCeng = RegUtil.getRegOne("楼层: ([^<]+)", html);
 					if(StringUtil.isNotEmpty(louCeng)){
 						house.setLouCeng(louCeng);
 					}
 					String xiaoQu = RegUtil.getRegOne("title=\"([^\"]+)小区", html);
+					if(StringUtil.isEmpty(xiaoQu))
+						xiaoQu = RegUtil.getRegOne("em class=\"act\">([^\"]+)小区简介", html);
 					if(StringUtil.isNotEmpty(xiaoQu)){
 						house.setXiaoQu(xiaoQu);
 					}
@@ -115,7 +130,7 @@ public class HouseBuyZjgzfService {
 					}
 					
 					//取房源详情描述
-					if(html.contains("class=\"FangyuanCon")){
+					if(html.contains("FangyuanCon")){
 						//学区
 						String refFlag = "[\u4E00-\u9FFF]{2,}";
 						String youErYuan = RegUtil.getRegOne("("+refFlag+"幼儿园)", html);
@@ -139,7 +154,55 @@ public class HouseBuyZjgzfService {
 						}
 						
 						//图片
-						
+						StringBuilder picturesBuf = new StringBuilder();
+						List<String> imgUrlList = RegUtil.getRegAll("src=\"(http://img.zjgzf.cn/attached/image/[0-9]+/[0-9_]+\\.[a-zA-Z]+)\"", html);
+						if(CollectionUtil.isEmpty(imgUrlList)){
+							imgUrlList = RegUtil.getRegAll("src=\"(/fuwu/xiaoqu/uploads/[0-9]+\\.[a-zA-Z]+)\"", html);
+						}
+						if(CollectionUtil.isEmpty(imgUrlList)){
+							imgUrlList = RegUtil.getRegAll("src=\"(http://www.zjgzf.cn/fuwu/xiaoqu/uploads/[0-9]+\\.[a-zA-Z]+)\"", html);
+						}
+						Set<String> imgUrlSet = new HashSet<>();
+						for(String imgUrl:imgUrlList){
+							if(imgUrl.startsWith("/")){
+								imgUrl = "http://www.zjgzf.cn"+imgUrl;
+							}
+							if(imgUrlSet.contains(imgUrl)){
+								continue;
+							}
+							FileOutputStream out = null;
+							try {
+								for(int i=0;i<3;i++){
+									String fileName = (System.currentTimeMillis()+Integer.parseInt(StringUtil.getRandomString(3, "123456789")))+imgUrl.substring(imgUrl.lastIndexOf("."));
+									if(picturesBuf.length()+fileName.length() > 250){
+										break;
+									}
+									byte[] pictureData = HttpUtil.downloadGet(imgUrl);
+									File file = new File(imgDir+fileName);
+									if(file.exists()) continue;
+									
+									out = new FileOutputStream(file);
+									out.write(pictureData, 0, pictureData.length);
+									out.close();
+									
+									imgUrlSet.add(imgUrl);
+									if(picturesBuf.length() > 0){
+										picturesBuf.append(",");
+									}
+									picturesBuf.append(fileName);
+									break;
+								}
+							} catch (Exception e) {
+								System.out.println("url: "+houseUrl+" 图片有问题");
+							} finally {
+								if(out != null){
+									try {
+										out.close();
+									} catch (Exception e2) {}
+								}
+							}
+						}
+						house.setPictures(picturesBuf.toString());
 					}
 					
 					keywordsBuf.delete(0, keywordsBuf.length());
