@@ -21,12 +21,12 @@ public class HouseBuySpiderRest {
 	@Autowired
 	private SpiderTaskService spiderTaskService;
 	
-	@Request(value="/clean",method=RequestMethod.GET)
+	@Request(title="清除",value="/clean",method=RequestMethod.GET)
 	public void delete(){
 		spiderTaskService.clean();
 	}
 	
-	@Request(value="/zjgzf",method=RequestMethod.GET)
+	@Request(title="张家港找房网",value="/zjgzf",method=RequestMethod.GET)
 	public String zjgzf(
 			@Required
 			@RequestParam("page")Integer page,
@@ -41,7 +41,7 @@ public class HouseBuySpiderRest {
 		return id;
 	}
 	
-	@Request(value="/5khouse",method=RequestMethod.GET)
+	@Request(title="看房网",value="/5khouse",method=RequestMethod.GET)
 	public String _5khouse(
 			@Required
 			@RequestParam("page")Integer page,
@@ -55,4 +55,5 @@ public class HouseBuySpiderRest {
 		}
 		return id;
 	}
+	
 }

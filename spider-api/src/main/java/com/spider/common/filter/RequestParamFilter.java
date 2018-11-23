@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.axe.annotation.mvc.RequestParam;
+import org.axe.bean.mvc.ExceptionHolder;
 import org.axe.bean.mvc.FileParam;
 import org.axe.bean.mvc.FormParam;
 import org.axe.bean.mvc.Handler;
 import org.axe.bean.mvc.Handler.ActionParam;
 import org.axe.bean.mvc.Param;
+import org.axe.bean.mvc.ResultHolder;
 import org.axe.exception.RestException;
 import org.axe.interface_.mvc.Filter;
 import org.axe.util.CollectionUtil;
@@ -104,9 +106,8 @@ public class RequestParamFilter implements Filter {
 		return true;
 	}
 
-	@Override
-	public void doEnd() {
-		
-	}
 
+	@Override
+	public void doEnd(HttpServletRequest arg0, HttpServletResponse arg1, Param arg2, Handler arg3, ResultHolder arg4,
+			ExceptionHolder arg5) {}
 }

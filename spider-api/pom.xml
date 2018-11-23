@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.axe</groupId>
             <artifactId>axe</artifactId>
-            <version>0.1.7</version>
+            <version>18.5.29</version>
         </dependency>
     	<!-- Apache DBCP 数据源(这是默认数据源，可以自我指定数据源)-->
         <dependency>
